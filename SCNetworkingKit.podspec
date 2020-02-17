@@ -11,8 +11,8 @@
 
 Pod::Spec.new do |s|
 
-  s.name         = "SCNetworkingKit"
-  s.version      = "0.1.1"
+  s.name         = "SCNetworking"
+  s.version      = "0.1.0"
   s.summary      = "网络请求组件"
   s.description  = <<-DESC
                     支持get，post，upload,put请求，使用URLSession
