@@ -206,7 +206,9 @@ goto exceptionLabel;                                                \
         startLog = [self stringByReplaceUnicode:startLog];
         logStr = [self stringByReplaceUnicode:logStr];
 //        printf("%s\n%s\n%s",[startLog  UTF8String],[logStr UTF8String],[endStr UTF8String]);
-        NSLog(@"%s\n%s\n%s",[startLog  UTF8String],[logStr UTF8String],[endStr UTF8String]);
+        NSLog(@"[SCNetworking] %s",[startLog UTF8String]);
+        NSLog(@"[SCNetworking] %s",[logStr UTF8String]);
+        NSLog(@"[SCNetworking] %s",[endStr UTF8String]);
         
         NSDate *beginDate = [self.requestTimeDic objectForKey:request];
         if (beginDate) {
@@ -236,7 +238,7 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
     // 计算进度
     float progress = (float)totalBytesSent / totalBytesExpectedToSend;
     if (task.taskDescription) {
-        NSLog(@"上传文件%@进度 %f",task.taskDescription,progress);
+        NSLog(@"[SCNetworking] 上传文件%@进度 %f",task.taskDescription,progress);
         [[NSNotificationCenter defaultCenter] postNotificationName:UploadFileProgressNotifyKey object:nil userInfo:@{task.taskDescription:[NSNumber numberWithFloat:progress]}];
     }
 }
@@ -1248,7 +1250,7 @@ static BOOL serverTrustIsVaild(SecTrustRef trust) {
     NSMutableData *requestMutableData=[[SCNetworking shareInstance] createFileMutableDataWithData:[paramDic objectForKey:@"file"] ContentType:@"multipart/form-data" FileName:@"filename" Boundary:boundary];
     
     [request setValue:[NSString stringWithFormat:@"%lu",(unsigned long)requestMutableData.length] forHTTPHeaderField:@"Content-Length"];
-    NSLog(@"%@",[[NSString alloc] initWithData:requestMutableData encoding:NSUTF8StringEncoding]);
+    NSLog(@"[SCNetworking] %@",[[NSString alloc] initWithData:requestMutableData encoding:NSUTF8StringEncoding]);
     //log
     [[SCNetworking shareInstance] printRequest:request withHeader:request.allHTTPHeaderFields withParamter:paramDic];
     
