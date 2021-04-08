@@ -181,4 +181,10 @@ typedef void (^SCBatchRequestConfigBlock)(NSMutableURLRequest *  batchRequest);
 
 
 
+#pragma mark -
+
+//创建NSURLSessionDataTask
+-(NSURLSessionDataTask*)createJsonDataTaskWith:(NSMutableURLRequest *)request completionSuccess:(void (^)(NSURLResponse *response, NSDictionary *responseDictionary))success failed:(void (^)(NSURLResponse *response,NSError *error))failed;
+
+
 @end

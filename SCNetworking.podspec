@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   
 
   s.name         = "SCNetworking"
-  s.version      = "0.2.0"
+  s.version      = "0.2.1"
   s.summary      = "网络请求组件"
 
 
