@@ -161,7 +161,7 @@ goto exceptionLabel;                                                \
         if ([header objectForKey:@"sign"] == nil) {
         NSString* newSign = [SCNetworking getSignPlanTextFrom:header HttpBody:request.HTTPBody];
 
-        logStr = [NSString stringWithFormat:@"\n#############SCNetworking STRAT#############\n\n%@\n============= Header =============\n%@\n============= Paramter =============\n%@\n签名明文：%@",request?:@"",header?:@"",parater?:@"",newSign?:@""];
+        logStr = [NSString stringWithFormat:@"\n#############SCNetworking STRAT*#############\n\n%@\n============= Header =============\n%@\n============= Paramter =============\n%@\n签名明文：%@",request?:@"",header?:@"",parater?:@"",newSign?:@""];
         }
         else
         {
@@ -282,10 +282,13 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend {
                 credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
                 if (credential) {
                     disposition = NSURLSessionAuthChallengeUseCredential;
+                    NSLog(@"[sss] disposition NSURLSessionAuthChallengeUseCredential");
                 }
             } else {
                 /* 无效的话，取消 */
                 disposition = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
+                
+                NSLog(@"[sss] disposition 无效");
             }
         }
         else
@@ -415,15 +418,22 @@ static BOOL AFSecKeyIsEqualToKey(SecKeyRef key1, SecKeyRef key2) {
 {
     SecTrustRef trust = challenge.protectionSpace.serverTrust;
     
+    CFArrayRef policiesRef;
+    SecTrustCopyPolicies(trust, &policiesRef);
+    
     NSMutableArray *policies = [NSMutableArray array];
     if (self.trustDomain) {
         [policies addObject:(__bridge_transfer id)SecPolicyCreateSSL(true, (__bridge CFStringRef)self.trustDomain)];
+        SecTrustSetPolicies(trust, (__bridge CFArrayRef)policies);
     } else {
         // BasicX509 不验证域名是否相同
         [policies addObject:(__bridge_transfer id)SecPolicyCreateBasicX509()];
+        SecTrustSetPolicies(trust, (__bridge CFArrayRef)policies);
+        NSLog(@"[sss] BasicX509 不验证域名是否相同");
+        // 需要验证域名，否则存在安全隐患
+//        SecTrustSetPolicies(trust, policiesRef);
     }
 
-    SecTrustSetPolicies(trust, (__bridge CFArrayRef)policies);
     
     
     if (self.caData) {
@@ -489,6 +499,10 @@ static BOOL serverTrustIsVaild(SecTrustRef trust) {
         
         allowConnection = (trustResult == kSecTrustResultProceed
                            || trustResult == kSecTrustResultUnspecified);
+        NSLog(@"[sss] statue == noErr");
+    }
+    else {
+        NSLog(@"[sss] statue error");
     }
     return allowConnection;
 }
