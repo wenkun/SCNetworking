@@ -427,9 +427,9 @@ static BOOL AFSecKeyIsEqualToKey(SecKeyRef key1, SecKeyRef key2) {
         SecTrustSetPolicies(trust, (__bridge CFArrayRef)policies);
     } else {
         // BasicX509 不验证域名是否相同
-        [policies addObject:(__bridge_transfer id)SecPolicyCreateBasicX509()];
-        SecTrustSetPolicies(trust, (__bridge CFArrayRef)policies);
-        NSLog(@"[sss] BasicX509 不验证域名是否相同");
+//        [policies addObject:(__bridge_transfer id)SecPolicyCreateBasicX509()];
+//        SecTrustSetPolicies(trust, (__bridge CFArrayRef)policies);
+//        NSLog(@"[sss] BasicX509 不验证域名是否相同");
         // 需要验证域名，否则存在安全隐患
 //        SecTrustSetPolicies(trust, policiesRef);
     }
