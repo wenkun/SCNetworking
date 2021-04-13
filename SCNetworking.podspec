@@ -12,14 +12,14 @@
 Pod::Spec.new do |s|
   
   s.name         = "SCNetworking"
-  s.version      = "0.2.3"
+  s.version      = "0.2.4"
   s.summary      = "网络请求组件"
 
   s.description  = <<-DESC
                     支持get，post，upload,put请求，使用URLSession
                    DESC
 
-  s.homepage     = "https://10.199.96.150/iOS_pods/SCNetworking.git"
+  s.homepage     = "https://github.com/wenkun/SCNetworking.git"
   s.license      = "MIT"
   s.author             = { "李伯波" => "libaibo87@163.com" }
   s.platform     = :ios, "9.0"
