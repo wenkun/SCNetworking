@@ -28,7 +28,7 @@ typedef void (^SCBatchRequestConfigBlock)(NSMutableURLRequest *  batchRequest);
 @property(nonatomic,retain)NSDictionary* publicHeader;
 
 /// server证书经系统校验成功后，通过此方式回掉以便于增加新的校验方案
-@property (nonatomic, copy) void(^ didServerTrust)(SecTrustRef trust, void(^ accept)(BOOL accept));
+@property (nonatomic, copy) void(^ didServerTrust)(NSString *host, SecTrustRef trust, void(^ accept)(BOOL accept));
 
 //单例 用于用户自定义操作
 +(SCNetworking*)shareInstance;

@@ -437,7 +437,7 @@ static BOOL AFSecKeyIsEqualToKey(SecKeyRef key1, SecKeyRef key2) {
     if (nil == self.caData) {
         __block BOOL result = serverTrustIsVaild(trust);
         if (result && self.didServerTrust) {
-            self.didServerTrust(trust, ^(BOOL accept) {
+            self.didServerTrust(challenge.protectionSpace.host ,trust, ^(BOOL accept) {
                 result = accept;
             });
         }
