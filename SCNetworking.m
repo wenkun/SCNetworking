@@ -418,8 +418,6 @@ static BOOL AFSecKeyIsEqualToKey(SecKeyRef key1, SecKeyRef key2) {
 {
     SecTrustRef trust = challenge.protectionSpace.serverTrust;
     
-    CFArrayRef policiesRef;
-    SecTrustCopyPolicies(trust, &policiesRef);
     
     NSMutableArray *policies = [NSMutableArray array];
     if (self.trustDomain) {
@@ -430,10 +428,21 @@ static BOOL AFSecKeyIsEqualToKey(SecKeyRef key1, SecKeyRef key2) {
 //        [policies addObject:(__bridge_transfer id)SecPolicyCreateBasicX509()];
 //        SecTrustSetPolicies(trust, (__bridge CFArrayRef)policies);
 //        NSLog(@"[sss] BasicX509 不验证域名是否相同");
-        // 需要验证域名，否则存在安全隐患
+        
+//        CFArrayRef policiesRef;
+//        SecTrustCopyPolicies(trust, &policiesRef);
 //        SecTrustSetPolicies(trust, policiesRef);
     }
 
+    if (nil == self.caData) {
+        __block BOOL result = serverTrustIsVaild(trust);
+        if (result && self.didServerTrust) {
+            self.didServerTrust(trust, ^(BOOL accept) {
+                result = accept;
+            });
+        }
+        return result;
+    }
     
     
     if (self.caData) {
@@ -484,6 +493,7 @@ static BOOL AFSecKeyIsEqualToKey(SecKeyRef key1, SecKeyRef key2) {
     
     return serverTrustIsVaild(trust);
 }
+
 static BOOL serverTrustIsVaild(SecTrustRef trust) {
     BOOL allowConnection = NO;
     
@@ -496,7 +506,6 @@ static BOOL serverTrustIsVaild(SecTrustRef trust) {
     if (statue == noErr) {
         // kSecTrustResultUnspecified: 系统隐式地信任这个证书
         // kSecTrustResultProceed: 用户加入自己的信任锚点，显式地告诉系统这个证书是值得信任的
-        
         allowConnection = (trustResult == kSecTrustResultProceed
                            || trustResult == kSecTrustResultUnspecified);
         NSLog(@"[sss] statue == noErr");
